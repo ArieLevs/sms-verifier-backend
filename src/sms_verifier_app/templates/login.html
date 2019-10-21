@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <h1 class="page-header">Login</h1>
+    <hr>
+    <div class="row placeholders" style="margin-bottom: 3em;">
+        <div class="col-xs-6 col-sm-3 placeholder text-center">
+            <a href="{% url 'social:begin' 'google-oauth2' %}"><img
+                    src="{% static 'icons/google_signin_buttons/web/1x/btn_google_signin_dark_normal_web.png' %}"
+                    class="center-block img-responsive img-circle"
+                    alt="Login using Google"></a>
+            <h4>Google</h4>
+        </div>
+
+        <div class="col-xs-6 col-sm-3 placeholder text-center">
+            <a href="{% url 'social:begin' 'github' %}"><img
+                    src="{% static 'icons/github/GitHub-Mark-64px.png' %}"
+                    class="center-block img-responsive img-circle"
+                    alt="Login using GitHub"></a>
+            <h4>GitHub</h4>
+        </div>
+    </div>
+{% endblock %}

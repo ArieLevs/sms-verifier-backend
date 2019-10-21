@@ -10,7 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, socket
+
+ENVIRONMENT = os.environ.get('environment', 'dev')
+DOMAIN_NAME = os.environ.get('domain_name', 'http://127.0.0.1:8000')
+
+try:
+    HOSTNAME = socket.gethostname()
+except ImportError as e:
+    HOSTNAME = 'localhost'
+PROJECT_NAME = 'SMS Verifier'
+VERSION = os.environ.get('version', 'null')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,6 +47,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'oauth2_provider',
+    'django_user_email_extension',
+
+    'sms_verifier_app'
 ]
 
 MIDDLEWARE = [
@@ -118,3 +134,89 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+######################
+# Custom User Model
+######################
+AUTH_USER_MODEL = 'django_user_email_extension.User'
+
+##################
+# REST Framework
+##################
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+######################
+# Social Auth
+######################
+SOCIAL_AUTH_USER_MODEL = 'django_user_email_extension.User'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'index'
+SOCIAL_AUTH_LOGOUT_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_LOGIN_URL = 'index'
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('google_oauth_client_id', 'None')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('google_oauth_client_secret', 'None')
+SOCIAL_AUTH_GITHUB_KEY = os.environ.get('github_oauth_client_id', 'None')
+SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('github_oauth_client_secret', 'None')
+SOCIAL_AUTH_GITHUB_SCOPE = [
+    'read:user',
+    'user:email',
+    'read:org',
+]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+######################
+# LOGGING SETTINGS
+######################
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+HANDLERS = ['console']
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'level': LOG_LEVEL,
+            'class': 'logging.StreamHandler',
+        },
+    },
+
+    'loggers': {
+        PROJECT_NAME: {
+            'handlers': HANDLERS,
+            'level': LOG_LEVEL,
+        },
+        'django.request': {
+            'handlers': HANDLERS,
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}

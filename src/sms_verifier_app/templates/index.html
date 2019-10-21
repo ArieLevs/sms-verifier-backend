@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <h1 class="page-header">SMS Verifier</h1>
+    {% if user.is_authenticated %}
+        <p>Hello <code>some code snippet</code></p>
+    {% else %}
+        <p>You are not logged in, <a href="{% url 'sms_verifier_app:login_page' %}" >login now</a></p>
+    {% endif %}
+{% endblock %}
