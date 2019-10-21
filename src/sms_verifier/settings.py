@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_settings.urls'
+ROOT_URLCONF = 'sms_verifier.urls'
 
 TEMPLATES = [
     {
