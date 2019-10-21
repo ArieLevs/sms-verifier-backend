@@ -1,0 +1,7 @@
+# Make sure using python3 in order to install django 2.x and above
+django==2.2.6
+
+django_user_email_extension
+djangorestframework
+django-oauth-toolkit
+django-ipware
