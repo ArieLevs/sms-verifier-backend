@@ -6,6 +6,19 @@
     {% if user.is_authenticated %}
         <p>Hello <code>some code snippet</code></p>
     {% else %}
-        <p>You are not logged in, <a href="{% url 'sms_verifier_app:login_page' %}" >login now</a></p>
+        <p>You are not logged in, <a href="{% url 'sms_verifier_app:login_page' %}">login now</a></p>
     {% endif %}
+
+    <form id="contacts_file_upload" name="contacts_file_upload"
+          action="{% url 'sms_verifier_app:upload_contacts' %}" method="POST"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <label class="btn btn-info btn-fill btn-file">
+            Choose File<input id="id_filename" type="file" name="filename"
+                              style="display: none;">
+        </label>
+        <br>
+        <input class="btn btn-info btn-fill" type="submit" value="Upload File"/>
+    </form>
+
 {% endblock %}

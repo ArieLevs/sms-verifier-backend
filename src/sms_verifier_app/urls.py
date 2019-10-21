@@ -9,4 +9,6 @@ urlpatterns = [
     # General
     url(r'^login_page/', views.login_page, name='login_page'),
     url(r'^logout_process/', views.logout_process, name='logout_process'),
+
+    url(r'^upload_contacts/', views.upload_contacts, name='upload_contacts'),
 ]
