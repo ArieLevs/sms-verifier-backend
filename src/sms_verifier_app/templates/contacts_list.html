@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <h1 class="page-header">SMS Verifier</h1>
+    {% if user.is_authenticated %}
+        <p>Contacts List</p>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main-box clearfix">
+                    <div class="table-responsive">
+                        <table class="table user-list">
+                            <thead>
+                            <tr>
+                                <th><span>First Name</span></th>
+                                <th><span>Last Name</span></th>
+                                <th class="text-center"><span>Phone Number</span></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for contact in contacts_list %}
+                                <tr>
+                                    <td>
+                                        <span class="label label-default">{{ contact.first_name }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="label label-default">{{ contact.last_name }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="label label-default">{{ contact.phone_number }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+
+    {% else %}
+        <p>You are not logged in, <a href="{% url 'sms_verifier_app:login_page' %}">login now</a></p>
+    {% endif %}
+
+{% endblock %}

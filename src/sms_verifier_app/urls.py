@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^logout_process/', views.logout_process, name='logout_process'),
 
     url(r'^upload_contacts/', views.upload_contacts, name='upload_contacts'),
+    url(r'^contacts_list_view/', views.contacts_list_view, name='contacts_list_view')
 ]

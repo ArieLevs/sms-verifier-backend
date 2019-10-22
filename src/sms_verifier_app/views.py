@@ -149,3 +149,21 @@ def upload_contacts(request):
         status=HttpResponse.status_code,
     )
 
+
+@login_required()
+def contacts_list_view(request):
+    default_logger.info("contacts_list_view request at: " + str(datetime.datetime.now()))
+    default_logger.info(request)
+
+    # return all contacts from database
+    contacts_list = Contacts.objects.all()
+
+    temp_context = context.copy()
+    temp_context['contacts_list'] = contacts_list
+
+    return render(
+        request,
+        settings.BASE_DIR + '/sms_verifier_app/templates/contacts_list.html',
+        temp_context,
+        status=HttpResponse.status_code,
+    )
