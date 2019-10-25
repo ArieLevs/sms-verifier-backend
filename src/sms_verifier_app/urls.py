@@ -15,4 +15,5 @@ urlpatterns = [
 
     # REST API urls
     url(r'^contacts_list/', views_api.ContactsList.as_view(), name='contacts_list'),
+    url(r'^broadcast_lists/', views_api.BroadcastListView.as_view(), name='broadcast_lists'),
 ]

@@ -15,3 +15,14 @@ class Contacts(models.Model):
         verbose_name = _('contacts')
         verbose_name_plural = _('contacts')
         db_table = 'contacts'
+
+
+class BroadcastList(models.Model):
+    name = models.CharField(_('Name of List'), max_length=255, null=False,)
+    message_content = models.TextField(null=False, blank=False,)
+    contacts = models.ManyToManyField(Contacts)
+
+    class Meta:
+        verbose_name = _('broadcast_list')
+        verbose_name_plural = _('broadcast_list')
+        db_table = 'broadcast_list'
