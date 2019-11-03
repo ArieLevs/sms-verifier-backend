@@ -105,3 +105,22 @@ class BroadcastListView(APIView):
             default_logger.info(json_array)
 
         return Response({'status': message, 'message': value}, status=response_code)
+
+
+class HealthCheckView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    @staticmethod
+    def post(request):
+        default_logger.info("HealthCheckView request at: " + str(datetime.datetime.now()))
+
+        # Get token from request
+        token = request.auth
+        email = str(token.user)
+        default_logger.info("request from user: " + email)
+
+        message = 'success'
+
+        # If all passed OK return user name
+        default_logger.info("Success, health_check passed OK")
+        return Response({'status': message, 'message': email}, status=status.HTTP_200_OK)
