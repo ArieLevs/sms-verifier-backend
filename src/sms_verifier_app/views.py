@@ -1,5 +1,7 @@
 import datetime
 import logging
+from uuid import UUID
+from ipware.ip import get_real_ip
 
 from django.conf import settings
 from django.shortcuts import render
@@ -166,4 +168,43 @@ def contacts_list_view(request):
         settings.BASE_DIR + '/sms_verifier_app/templates/contacts_list.html',
         temp_context,
         status=HttpResponse.status_code,
+    )
+
+
+def verify_guest_uuid(request, uuid):
+    default_logger.info("New verify_guest_uuid request at: " + str(datetime.datetime.now()))
+    default_logger.info(str(request))
+
+    try:  # If incoming UUID exist in the db
+        try:
+            uuid_object = UUID(uuid, version=4)
+        except ValueError:
+            default_logger.info("UUID is not valid")
+            context.update({'error': 'The uuid used is not valid'})
+            return render(
+                request,
+                settings.BASE_DIR + '/sms_verifier_app/templates/uuid_error.html',
+                context,
+            )
+        guest = Contacts.objects.get(uuid=uuid_object)
+    except Contacts.DoesNotExist:
+        default_logger.info("UUID does not exist in db or is expired")
+        context.update({'error': 'It seems you do not have a valid uuid'})
+        return render(
+            request,
+            settings.BASE_DIR + '/sms_verifier_app/templates/uuid_error.html',
+            context,
+        )
+
+    default_logger.info("All OK, providing guest page")
+
+    ip = get_real_ip(request)
+    if ip is None:
+        ip = '0.0.0.0'
+
+    # If all is OK then render guest approval page
+    return render(
+        request,
+        settings.BASE_DIR + '/sms_verifier_app/templates/guest_approve.html',
+        context,
     )

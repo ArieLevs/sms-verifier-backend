@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <div class="login">
+    <div class="form-group">
+        <h1>Guest approve</h1>
+        {% if error %}
+            <div style="margin:0 auto; color: ghostwhite; text-align: center ">
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
