@@ -208,3 +208,12 @@ def verify_guest_uuid(request, uuid):
         settings.BASE_DIR + '/sms_verifier_app/templates/guest_approve.html',
         context,
     )
+
+
+def handle_404_errors(request, exception, template_name='404.html'):
+    return render(
+        request,
+        settings.BASE_DIR + '.sms_verifier_app/templates/404.html',
+        context,
+        status=404,
+    )
