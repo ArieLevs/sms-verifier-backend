@@ -1,4 +1,4 @@
-from sms_verifier_app.models import Contacts, BroadcastList
+from sms_verifier_app.models import Contacts, BroadcastList, Event, EventAttendances
 from django.contrib import admin
 
 
@@ -11,6 +11,20 @@ class CustomDevicesAdmin(admin.ModelAdmin):
 
 @admin.register(BroadcastList)
 class BroadcastListAdmin(admin.ModelAdmin):
-    list_display = ('name', 'message_content')
+    list_display = ('name', 'for_event')
     ordering = ('name',)
+    pass
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('name', 'event_message_content')
+    ordering = ('name',)
+    pass
+
+
+@admin.register(EventAttendances)
+class EventAttendancesAdmin(admin.ModelAdmin):
+    list_display = ('event', 'contact')
+    ordering = ('event',)
     pass
