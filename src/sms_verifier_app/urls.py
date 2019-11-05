@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^contacts_list_view/', views.contacts_list_view, name='contacts_list_view'),
 
     url(r'^guest/(?P<uuid>[a-z0-9\-]+)/', views.verify_guest_uuid, name='guest_uuid'),
+    url(r'^approve_guest/', views_api.ApproveGuestView.as_view(), name='approve_guest'),
 
     # REST API urls
     url(r'^contacts_list/', views_api.ContactsList.as_view(), name='contacts_list'),

@@ -3,13 +3,51 @@
 
 {% block body_block %}
     <div class="login">
-    <div class="form-group">
-        <h1>Guest approve</h1>
-        {% if error %}
-            <div style="margin:0 auto; color: ghostwhite; text-align: center ">
-                <p>{{ error }}</p>
-            </div>
-        {% endif %}
+        <div class="form-group">
+            <h1>Guest approve</h1>
+            {% if error %}
+                <div style="margin:0 auto; color: ghostwhite; text-align: center ">
+                    <p>{{ error }}</p>
+                </div>
+            {% else %}
+                <p>Hi {{ guest_f_name }} {{ guest_l_name }},</p>
+
+                <form method="POST" action="{% url 'sms_verifier_app:approve_guest' %}" id="guest_approve"
+                      name="guest_approve" role="form">
+                    {% csrf_token %}
+
+                    <input name="uuid" type="hidden" value="{{ uuid }}" />
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Attending</label>
+                                <select class="form-control" id="attending" name="attending" required>
+                                    <option value="yes" selected>yes</option>
+                                    <option value="yes">yes</option>
+                                    <option value="no">no</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Num of Guests</label>
+                                <select class="form-control" id="num_of_guests" name="num_of_guests" required>
+                                    <option value="1" selected>1</option>
+                                    {% for num in '1234'|make_list %}
+                                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="form_error_div" class="alert alert-danger" style="visibility: hidden"></div>
+
+                    <button type="submit" class="btn btn-primary btn-fill pull-right">Approve</button>
+                    <div class="clearfix"></div>
+                </form>
+            {% endif %}
+        </div>
     </div>
-</div>
 {% endblock %}

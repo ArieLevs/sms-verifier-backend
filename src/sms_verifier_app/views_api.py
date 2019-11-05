@@ -1,8 +1,11 @@
 
 import datetime
 import logging
+from uuid import UUID
 
 from sms_verifier_app.models import Contacts, BroadcastList
+from sms_verifier_app.serializers import ApproveGuestSerializer
+from sms_verifier_app.views import context
 from django.conf import settings
 
 # REST Framework
@@ -88,14 +91,18 @@ class BroadcastListView(APIView):
                 # create list of contact, of current broadcast list
                 contact_list = [
                     {
-                        'first_name': a.first_name,
-                        'phone_number': a.phone_number
-                    } for a in broadcast_list.contacts.all()
+                        'event_name': attendance.event.name,
+                        'first_name': attendance.contact.first_name,
+                        'phone_number': attendance.contact.phone_number,
+                        'uuid': attendance.uuid,
+                    } for attendance in broadcast_list.attendances.all()
                 ]
 
                 json_array.append({
-                    'name': broadcast_list.name,
-                    'message_content': broadcast_list.message_content,
+                    'broadcast_name': broadcast_list.name,
+                    'event_name': broadcast_list.for_event.name,
+                    'event_date': broadcast_list.for_event.event_date,
+                    'message_content': broadcast_list.for_event.event_message_content,
                     'contacts': contact_list,
                 })  # Append current list to the array
 
@@ -124,3 +131,57 @@ class HealthCheckView(APIView):
         # If all passed OK return user name
         default_logger.info("Success, health_check passed OK")
         return Response({'status': message, 'message': email}, status=status.HTTP_200_OK)
+
+
+# No authentication needed
+class ApproveGuestView(APIView):
+    """
+    This API call will update a guests attendance status,
+    once ApproveGuestSerializer is ok, the owner of input uuid status will update
+    """
+    permission_classes = ()
+
+    @staticmethod
+    def post(request):
+        serializer = ApproveGuestSerializer(data=request.data)
+
+        # Check format and unique constraint
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        default_logger.info("ApproveGuestView request at: " + str(datetime.datetime.now()))
+
+        data = serializer.data
+
+        try:
+            try:
+                # Try getting a UUID object for current uuid string received
+                uuid_object = UUID(data['uuid'], version=4)
+            except ValueError:
+                default_logger.info("uuid is not valid")
+                message = 'error'
+                value = 'uuid is not valid'
+
+                return Response({'status': message, 'message': value}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Next, try getting the relevant guest
+            guest = Contacts.objects.get(uuid=uuid_object)
+
+        except Contacts.DoesNotExist:
+            default_logger.info("uuid does not exist in db")
+            return Response({'status': 'error', 'message': 'uuid does not exist in db'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        tmp_context = context.copy()
+        tmp_context['guest_f_name'] = guest.first_name
+        tmp_context['guest_l_name'] = guest.last_name
+        tmp_context['uuid'] = guest.uuid
+
+        default_logger.info("{} {}, ")
+        print(data)
+
+        response_code = status.HTTP_200_OK
+        message = 'success'
+        value = ''
+
+        return Response({'status': message, 'message': value}, status=response_code)

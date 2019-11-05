@@ -186,7 +186,15 @@ def verify_guest_uuid(request, uuid):
                 settings.BASE_DIR + '/sms_verifier_app/templates/uuid_error.html',
                 context,
             )
+
+        tmp_context = context.copy()
+
         guest = Contacts.objects.get(uuid=uuid_object)
+
+        tmp_context['guest_f_name'] = guest.first_name
+        tmp_context['guest_l_name'] = guest.last_name
+        tmp_context['uuid'] = uuid
+
     except Contacts.DoesNotExist:
         default_logger.info("UUID does not exist in db or is expired")
         context.update({'error': 'It seems you do not have a valid uuid'})
@@ -206,7 +214,7 @@ def verify_guest_uuid(request, uuid):
     return render(
         request,
         settings.BASE_DIR + '/sms_verifier_app/templates/guest_approve.html',
-        context,
+        tmp_context,
     )
 
 
