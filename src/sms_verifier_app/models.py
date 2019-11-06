@@ -43,7 +43,7 @@ class EventAttendances(models.Model):
     num_of_guests = models.IntegerField(_('Number of guests attending'), default=0)
 
     def __str__(self):
-        return str(self.uuid)
+        return self.contact.first_name + ' ' + self.contact.last_name + ' - ' + str(self.uuid)
 
     class Meta:
         unique_together = (('event', 'contact'),)  # Set primary combined key
