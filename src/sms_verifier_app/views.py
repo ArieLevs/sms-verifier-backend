@@ -203,10 +203,6 @@ def broadcasts_list_view(request):
     temp_context = context.copy()
     temp_context['broadcasts_list'] = broadcasts_list
 
-    for a in broadcasts_list:
-        default_logger.error(a.name + "BBBBBBBsfd")
-        default_logger.error(a.attendances.all())
-
     return render(
         request,
         settings.BASE_DIR + '/sms_verifier_app/templates/broadcasts_list.html',
