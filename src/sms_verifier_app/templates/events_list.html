@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <h1 class="page-header">SMS Verifier</h1>
+    {% if user.is_authenticated %}
+        <p>Events List</p>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main-box clearfix">
+                    <div class="table-responsive">
+                        <table class="table user-list">
+                            <thead>
+                            <tr>
+                                <th><span>Event Name</span></th>
+                                <th><span>Type</span></th>
+                                <th class="text-center"><span>Message</span></th>
+                                <th><span>Event Date</span></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for event in events_list %}
+                                <tr>
+                                    <td>
+                                        <span class="label label-default">{{ event.name }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="label label-default">{{ event.type }}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="label label-default">{{ event.event_message_content }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="label label-default">{{ event.event_date }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+    {% else %}
+        <p>You are not logged in, <a href="{% url 'sms_verifier_app:login_page' %}">login now</a></p>
+    {% endif %}
+
+{% endblock %}

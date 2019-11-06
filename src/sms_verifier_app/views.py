@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
 from sms_verifier_app.forms import CSVImportForm
-from sms_verifier_app.models import Contacts
+from sms_verifier_app.models import Contacts, Event, BroadcastList
 
 # Define logger
 default_logger = logging.getLogger(settings.PROJECT_NAME)
@@ -166,6 +166,50 @@ def contacts_list_view(request):
     return render(
         request,
         settings.BASE_DIR + '/sms_verifier_app/templates/contacts_list.html',
+        temp_context,
+        status=HttpResponse.status_code,
+    )
+
+
+@login_required()
+def events_list_view(request):
+    default_logger.info("events_list_view request at: " + str(datetime.datetime.now()))
+    default_logger.info(request)
+
+    # return all events from database
+    events_list = Event.objects.all()
+    default_logger.info("returned events list: {}".format(events_list))
+
+    temp_context = context.copy()
+    temp_context['events_list'] = events_list
+
+    return render(
+        request,
+        settings.BASE_DIR + '/sms_verifier_app/templates/events_list.html',
+        temp_context,
+        status=HttpResponse.status_code,
+    )
+
+
+@login_required()
+def broadcasts_list_view(request):
+    default_logger.info("broadcasts_list_view request at: " + str(datetime.datetime.now()))
+    default_logger.info(request)
+
+    # return all broadcasts from database
+    broadcasts_list = BroadcastList.objects.all()
+    default_logger.info("returned broadcasts list: {}".format(broadcasts_list))
+
+    temp_context = context.copy()
+    temp_context['broadcasts_list'] = broadcasts_list
+
+    for a in broadcasts_list:
+        default_logger.error(a.name + "BBBBBBBsfd")
+        default_logger.error(a.attendances.all())
+
+    return render(
+        request,
+        settings.BASE_DIR + '/sms_verifier_app/templates/broadcasts_list.html',
         temp_context,
         status=HttpResponse.status_code,
     )
