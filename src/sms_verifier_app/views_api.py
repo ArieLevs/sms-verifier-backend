@@ -19,6 +19,26 @@ default_logger = logging.getLogger(settings.PROJECT_NAME)
 
 
 class ContactsList(APIView):
+    """
+    API will iterate over 'Contacts' model
+
+    A successful call should return:
+    {
+        "status": "success",
+        "message": [
+            {
+                "first_name": "John",
+                "last_name": "Smith",
+                "phone_number": "972531234567"
+            },
+            {
+                "first_name": "Alice",
+                "last_name": "",
+                "phone_number": "972541234567"
+            }
+        ]
+    }
+    """
     permission_classes = (IsAuthenticated,)
 
     @staticmethod
@@ -61,6 +81,32 @@ class ContactsList(APIView):
 
 
 class BroadcastListView(APIView):
+    """
+    A successful call will return:
+    {
+        "status": "success",
+        "message": [
+            {
+                "broadcast_name": "br_test_list",
+                "event_name": "Wedding on th year",
+                "event_date": "2019-11-28",
+                "message_content": "Hi {},\r\nThis is a test message content for {}",
+                "contacts": [
+                    {
+                        "first_name": "John",
+                        "phone_number": "972531234567",
+                        "uuid": "9b64507b-033d-4dd2-aa3f-aab94c82eeb7"
+                    },
+                    {
+                        "first_name": "Alice",
+                        "phone_number": "972541234567",
+                        "uuid": "0b212b85-ecef-4301-85ec-6495fd2a6f41"
+                    }
+                ]
+            }
+        ]
+    }
+    """
     permission_classes = (IsAuthenticated,)
 
     @staticmethod
@@ -88,23 +134,23 @@ class BroadcastListView(APIView):
 
             # Build Json array from the 'broadcast_lists' response from the DB
             for broadcast_list in broadcast_lists:
-                # create list of contact, of current broadcast list
-                contact_list = [
+                # create list of attendances, of current broadcast list
+                attendances_list = [
                     {
-                        'event_name': attendance.event.name,
                         'first_name': attendance.contact.first_name,
                         'phone_number': attendance.contact.phone_number,
                         'uuid': attendance.uuid,
                     } for attendance in broadcast_list.attendances.all()
                 ]
 
+                # Create a list that define an even (message broadcast)
                 json_array.append({
                     'broadcast_name': broadcast_list.name,
                     'event_name': broadcast_list.for_event.name,
                     'event_date': broadcast_list.for_event.event_date,
                     'message_content': broadcast_list.for_event.event_message_content,
-                    'contacts': contact_list,
-                })  # Append current list to the array
+                    'contacts': attendances_list,
+                })
 
             response_code = status.HTTP_200_OK
             message = 'success'
