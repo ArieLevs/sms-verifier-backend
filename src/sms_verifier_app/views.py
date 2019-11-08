@@ -53,6 +53,18 @@ def login_page(request):
         )
 
 
+def contacts_add_view(request):
+    default_logger.info("contacts_add_view request at: " + str(datetime.datetime.now()))
+    default_logger.info(request)
+
+    return render(
+        request,
+        settings.BASE_DIR + '/sms_verifier_app/templates/contacts_add.html',
+        context,
+        status=HttpResponse.status_code,
+    )
+
+
 def logout_process(request):
     default_logger.info("logout_process request at: " + str(datetime.datetime.now()) + " by user: " + str(request.user))
 
@@ -146,7 +158,7 @@ def upload_contacts(request):
     # Render list page with the documents and the form
     return render(
         request,
-        template_name=settings.BASE_DIR + '/sms_verifier_app/templates/index.html',
+        template_name=settings.BASE_DIR + '/sms_verifier_app/templates/contacts_add.html',
         context=tmp_context,
         status=HttpResponse.status_code,
     )
