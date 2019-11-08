@@ -22,7 +22,6 @@ class Contacts(models.Model):
 class Event(models.Model):
     name = models.CharField(_('Event Name'), max_length=255, null=False)
     type = models.CharField(_('Event Type'), max_length=64, null=False)
-    event_message_content = models.TextField(_('Message of Event'), null=False, blank=False)
     event_date = models.DateField(_('Events Date'), null=False)
 
     def __str__(self):
@@ -39,6 +38,7 @@ class EventAttendances(models.Model):
     contact = models.ForeignKey(Contacts, on_delete=models.CASCADE)
     uuid = models.UUIDField(_('UUID'), default=uuid.uuid4)
 
+    is_responded = models.BooleanField(_('Is Responded'), default=False)
     is_attending = models.BooleanField(_('Is Attending'), default=False)
     num_of_guests = models.IntegerField(_('Number of guests attending'), default=0)
 
@@ -55,6 +55,7 @@ class EventAttendances(models.Model):
 class BroadcastList(models.Model):
     name = models.CharField(_('Name of List'), max_length=255, null=False,)
     for_event = models.OneToOneField(to=Event, on_delete=models.CASCADE)
+    event_message_content = models.TextField(_('Message of Event'), null=False, blank=False)
     attendances = models.ManyToManyField(EventAttendances)
 
     class Meta:

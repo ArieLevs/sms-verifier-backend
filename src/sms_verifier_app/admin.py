@@ -18,7 +18,7 @@ class BroadcastListAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'event_message_content')
+    list_display = ('name', 'event_date')
     ordering = ('name',)
     pass
 
