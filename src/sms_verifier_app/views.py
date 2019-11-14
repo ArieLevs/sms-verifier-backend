@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 
 from sms_verifier_app.forms import CSVImportForm
-from sms_verifier_app.models import Contacts, Event, BroadcastList
+from sms_verifier_app.models import Contacts, Event, BroadcastList, EventAttendances
 
 # Define logger
 default_logger = logging.getLogger(settings.PROJECT_NAME)
@@ -241,10 +241,10 @@ def verify_guest_uuid(request, uuid):
 
         tmp_context = context.copy()
 
-        guest = Contacts.objects.get(uuid=uuid_object)
+        event_attendance = EventAttendances.objects.get(uuid=uuid_object)
 
-        tmp_context['guest_f_name'] = guest.first_name
-        tmp_context['guest_l_name'] = guest.last_name
+        tmp_context['guest_f_name'] = event_attendance.contact.first_name
+        tmp_context['guest_l_name'] = event_attendance.contact.last_name
         tmp_context['uuid'] = uuid
 
     except Contacts.DoesNotExist:

@@ -148,7 +148,7 @@ class BroadcastListView(APIView):
                     'broadcast_name': broadcast_list.name,
                     'event_name': broadcast_list.for_event.name,
                     'event_date': broadcast_list.for_event.event_date,
-                    'message_content': broadcast_list.for_event.event_message_content,
+                    'message_content': broadcast_list.event_message_content,
                     'contacts': attendances_list,
                 })
 
