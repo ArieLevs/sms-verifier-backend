@@ -54,11 +54,12 @@ class EventAttendances(models.Model):
 
 class BroadcastList(models.Model):
     name = models.CharField(_('Name of List'), max_length=255, null=False,)
-    for_event = models.OneToOneField(to=Event, on_delete=models.CASCADE)
+    for_event = models.ForeignKey(to=Event, on_delete=models.CASCADE)
     event_message_content = models.TextField(_('Message of Event'), null=False, blank=False)
     attendances = models.ManyToManyField(EventAttendances)
 
     class Meta:
+        unique_together = (('name', 'for_event'),)  # Set primary combined key
         verbose_name = _('broadcast_list')
         verbose_name_plural = _('broadcast_list')
         db_table = 'broadcast_list'
