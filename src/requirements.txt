@@ -2,6 +2,8 @@
 django==2.2.6
 gunicorn==20.0.0
 
+mysqlclient==1.4.5
+
 django_user_email_extension
 djangorestframework
 django-oauth-toolkit
