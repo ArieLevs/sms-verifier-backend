@@ -3,7 +3,7 @@ import datetime
 import logging
 from uuid import UUID
 
-from sms_verifier_app.models import Contacts, BroadcastList
+from sms_verifier_app.models import Contacts, BroadcastList, EventAttendances
 from sms_verifier_app.serializers import ApproveGuestSerializer
 from sms_verifier_app.views import context
 from django.conf import settings
@@ -211,23 +211,27 @@ class ApproveGuestView(APIView):
                 return Response({'status': message, 'message': value}, status=status.HTTP_400_BAD_REQUEST)
 
             # Next, try getting the relevant guest
-            guest = Contacts.objects.get(uuid=uuid_object)
+            guest_attendance = EventAttendances.objects.get(uuid=uuid_object)
 
         except Contacts.DoesNotExist:
             default_logger.info("uuid does not exist in db")
             return Response({'status': 'error', 'message': 'uuid does not exist in db'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        tmp_context = context.copy()
-        tmp_context['guest_f_name'] = guest.first_name
-        tmp_context['guest_l_name'] = guest.last_name
-        tmp_context['uuid'] = guest.uuid
+        # Save current attendance values
+        guest_attendance.is_responded = True
+        guest_attendance.is_attending = data['attending']
+        guest_attendance.num_of_guests = data['num_of_guests']
+        guest_attendance.save()
 
-        default_logger.info("{} {}, ")
-        print(data)
+        tmp_context = context.copy()
+        tmp_context['guest_f_name'] = guest_attendance.contact.first_name
+        tmp_context['guest_l_name'] = guest_attendance.contact.last_name
+        tmp_context['uuid'] = guest_attendance.uuid
 
         response_code = status.HTTP_200_OK
         message = 'success'
-        value = ''
-
+        value = {'guest': guest_attendance.contact.first_name,
+                 'is_attending': data['attending'],
+                 'num_of_guests': data['num_of_guests']}
         return Response({'status': message, 'message': value}, status=response_code)
