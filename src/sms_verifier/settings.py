@@ -23,24 +23,27 @@ except ImportError as e:
 PROJECT_NAME = 'SMS Verifier'
 VERSION = os.environ.get('version', 'null')
 
+EXTRA_ALLOWED_HOSTS = os.environ.get('allowed_hosts', '').split(',')
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6x%n)-z+#0y7m4flv1(_(0v@p8-7_@0)#hy*ksnetwhx)a(+q_'
+SECRET_KEY = os.environ.get('django_secret_key', 'djangoSecretKey')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if 'dev' or 'ci' in ENVIRONMENT:
+    DEBUG = True
+    EXTRA_ALLOWED_HOSTS.append('*')
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = [
     'alpha.sms-verifier.nalkins.cloud',
     'sms-verifier.nalkins.cloud',
     '127.0.0.1',
-    '10.0.2.2'  # Android AVD IP for localhost
-]
+    '10.0.2.2',  # Android AVD IP for localhost
+] + EXTRA_ALLOWED_HOSTS
 
 # Application definition
 
@@ -92,12 +95,27 @@ WSGI_APPLICATION = 'sms_verifier.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+######################
+# DATABASE SETTINGS
+######################
+if ENVIRONMENT == 'dev':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ.get('db_name', 'sms_verifier'),
+            'USER': os.environ.get('db_user', 'sms_verifier'),
+            'PASSWORD': os.environ.get('db_pass', 'django'),
+            'HOST': os.environ.get('db_host', 'localhost'),
+            'PORT': '3306',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -133,7 +151,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = os.environ.get('static_url', "/static/")
 
 ######################
 # Custom User Model
