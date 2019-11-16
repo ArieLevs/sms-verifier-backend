@@ -10,6 +10,9 @@ ENV PYPI_REPO $PYPI_REPO
 RUN mkdir /sms-verifier-backend
 WORKDIR /sms-verifier-backend
 
+# Needed for mysqlclient requirement when using python alpine image
+RUN apk add --no-cache mariadb-dev build-base
+
 ADD src /sms-verifier-backend
 RUN pip install \
     --index-url $PYPI_REPO \
