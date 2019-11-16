@@ -25,6 +25,6 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(EventAttendances)
 class EventAttendancesAdmin(admin.ModelAdmin):
-    list_display = ('event', 'contact')
-    ordering = ('event',)
+    list_display = ('contact', 'event', 'uuid')
+    ordering = ('contact',)
     pass

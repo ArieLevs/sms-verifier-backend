@@ -24,7 +24,6 @@
                                 <label>Attending</label>
                                 <select class="form-control" id="attending" name="attending" required>
                                     <option value="yes" selected>yes</option>
-                                    <option value="yes">yes</option>
                                     <option value="no">no</option>
                                 </select>
                             </div>
@@ -33,7 +32,7 @@
                             <div class="form-group">
                                 <label>Num of Guests</label>
                                 <select class="form-control" id="num_of_guests" name="num_of_guests" required>
-                                    <option value="1" selected>1</option>
+{#                                    <option value="1" selected>1</option>#}
                                     {% for num in '1234'|make_list %}
                                         <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
                                     {% endfor %}
