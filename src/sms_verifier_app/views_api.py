@@ -235,3 +235,27 @@ class ApproveGuestView(APIView):
                  'is_attending': data['attending'],
                  'num_of_guests': data['num_of_guests']}
         return Response({'status': message, 'message': value}, status=response_code)
+
+
+class ReadinessProbe(APIView):
+    permission_classes = ()  # No Authentication needed here
+
+    @staticmethod
+    def post(request):
+        return Response('ok', status=status.HTTP_200_OK)
+
+    @staticmethod
+    def get(request):
+        return Response('ok', status=status.HTTP_200_OK)
+
+
+class LivenessProbe(APIView):
+    permission_classes = ()  # No Authentication needed here
+
+    @staticmethod
+    def post(request):
+        return Response('ok', status=status.HTTP_200_OK)
+
+    @staticmethod
+    def get(request):
+        return Response('ok', status=status.HTTP_200_OK)

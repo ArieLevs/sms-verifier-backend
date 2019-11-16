@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'^approve_guest/', views_api.ApproveGuestView.as_view(), name='approve_guest'),
 
     # REST API urls
+    url(r'^readiness/', views_api.ReadinessProbe.as_view(), name='readiness'),
+    url(r'^liveness/', views_api.LivenessProbe.as_view(), name='liveness'),
     url(r'^contacts_list/', views_api.ContactsList.as_view(), name='contacts_list'),
     url(r'^broadcast_lists/', views_api.BroadcastListView.as_view(), name='broadcast_lists'),
     url(r'^health_check/', views_api.HealthCheckView.as_view(), name='health_check'),
