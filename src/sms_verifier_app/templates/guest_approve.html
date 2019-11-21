@@ -16,7 +16,7 @@
                       name="guest_approve" role="form">
                     {% csrf_token %}
 
-                    <input name="uuid" type="hidden" value="{{ uuid }}" />
+                    <input name="uuid" type="hidden" value="{{ uuid }}"/>
 
                     <div class="row">
                         <div class="col-md-3">
@@ -32,7 +32,7 @@
                             <div class="form-group">
                                 <label>Num of Guests</label>
                                 <select class="form-control" id="num_of_guests" name="num_of_guests" required>
-{#                                    <option value="1" selected>1</option>#}
+                                    {#                                    <option value="1" selected>1</option>#}
                                     {% for num in '1234'|make_list %}
                                         <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
                                     {% endfor %}
@@ -46,6 +46,20 @@
                     <button type="submit" class="btn btn-primary btn-fill pull-right">Approve</button>
                     <div class="clearfix"></div>
                 </form>
+
+                <br>
+
+                <div class="row">
+                    <div class="col d-flex justify-content-center">
+                        <div class="item"><img src="/media/event_{{ event_image_id }}/event_image.jpeg"
+                                               class="img-fluid" alt="event image"></div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+
             {% endif %}
         </div>
     </div>

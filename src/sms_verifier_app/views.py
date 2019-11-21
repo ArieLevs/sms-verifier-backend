@@ -246,6 +246,7 @@ def verify_guest_uuid(request, uuid):
         tmp_context['guest_f_name'] = event_attendance.contact.first_name
         tmp_context['guest_l_name'] = event_attendance.contact.last_name
         tmp_context['uuid'] = uuid
+        tmp_context['event_image_id'] = event_attendance.event.id
 
     except Contacts.DoesNotExist:
         default_logger.info("UUID does not exist in db or is expired")

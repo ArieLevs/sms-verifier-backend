@@ -1,8 +1,10 @@
-
+import os
 import uuid
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from sms_verifier_app.storage import OverwriteStorage
 
 
 class Contacts(models.Model):
@@ -19,10 +21,23 @@ class Contacts(models.Model):
         db_table = 'contacts'
 
 
+# Return current event media directory
+def user_media_directory_path(instance, filename):
+    # Extract the file extension from the file
+    file_name, file_extension = os.path.splitext(filename)
+
+    # file will be uploaded to MEDIA_ROOT/event_<id>/<filename>
+    return 'event_{0}/{1}'.format(instance.id, 'event_image' + str(file_extension))
+
+
 class Event(models.Model):
     name = models.CharField(_('Event Name'), max_length=255, null=False)
     type = models.CharField(_('Event Type'), max_length=64, null=False)
     event_date = models.DateField(_('Events Date'), null=False)
+    event_image = models.ImageField(max_length=255,
+                                    storage=OverwriteStorage(),
+                                    upload_to=user_media_directory_path,
+                                    default='general_documents')
 
     def __str__(self):
         return self.name
@@ -53,7 +68,7 @@ class EventAttendances(models.Model):
 
 
 class BroadcastList(models.Model):
-    name = models.CharField(_('Name of List'), max_length=255, null=False,)
+    name = models.CharField(_('Name of List'), max_length=255, null=False)
     for_event = models.ForeignKey(to=Event, on_delete=models.CASCADE)
     event_message_content = models.TextField(_('Message of Event'), null=False, blank=False)
     attendances = models.ManyToManyField(EventAttendances)
