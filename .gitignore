@@ -110,3 +110,6 @@ venv.bak/
 # Intelij
 .idea/
 .idea/*
+
+static/
+media/
