@@ -38,6 +38,10 @@ if ENVIRONMENT == 'dev' or ENVIRONMENT == 'ci':
 else:
     DEBUG = False
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 ALLOWED_HOSTS = [
     'alpha.sms-verifier.nalkins.cloud',
     'sms-verifier.nalkins.cloud',
