@@ -59,7 +59,7 @@
                 {% if event_attendance.event.event_image %}
                     <div class="row">
                         <div class="col d-flex justify-content-center">
-                            <div class="item"><img src="/media/event_{{ event_attendance.event.id }}/event_image.jpeg"
+                            <div class="item"><img src="{{ MEDIA_URL }}/media/event_{{ event_attendance.event.id }}/event_image.jpeg"
                                                    class="img-fluid" alt="event image"></div>
                         </div>
                     </div>

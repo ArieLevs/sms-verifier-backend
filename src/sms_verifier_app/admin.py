@@ -25,6 +25,8 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(EventAttendances)
 class EventAttendancesAdmin(admin.ModelAdmin):
-    list_display = ('contact', 'event', 'uuid')
+    list_display = ('contact', 'event', 'is_responded', 'is_attending',)
+    list_filter = ('is_responded', 'is_attending',)
+    search_fields = ('contact',)
     ordering = ('contact',)
     pass

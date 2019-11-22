@@ -6,7 +6,7 @@
     <p><a href="https://github.com/ArieLevs/sms-verifier-backend">A Project</a> by <a
             href="https://github.com/ArieLevs">Arie Lev</a></p>
     {% if user.is_authenticated %}
-        <p>Hello <code>some code snippet</code></p>
+{#        <p>Hello <code>some code snippet</code></p>#}
     {% else %}
         <p>You are not logged in, <a href="{% url 'sms_verifier_app:login_page' %}">login now</a></p>
     {% endif %}
