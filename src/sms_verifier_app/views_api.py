@@ -7,6 +7,7 @@ from sms_verifier_app.models import Contacts, BroadcastList, EventAttendances
 from sms_verifier_app.serializers import ApproveGuestSerializer
 from sms_verifier_app.views import context
 from django.conf import settings
+from django.shortcuts import render
 
 # REST Framework
 from rest_framework.response import Response
@@ -225,16 +226,21 @@ class ApproveGuestView(APIView):
         guest_attendance.save()
 
         tmp_context = context.copy()
-        tmp_context['guest_f_name'] = guest_attendance.contact.first_name
-        tmp_context['guest_l_name'] = guest_attendance.contact.last_name
-        tmp_context['uuid'] = guest_attendance.uuid
+        tmp_context['guest_attendance'] = guest_attendance
 
         response_code = status.HTTP_200_OK
         message = 'success'
-        value = {'guest': guest_attendance.contact.first_name,
-                 'is_attending': data['attending'],
-                 'num_of_guests': data['num_of_guests']}
-        return Response({'status': message, 'message': value}, status=response_code)
+
+        return render(
+            request,
+            settings.BASE_DIR + '/sms_verifier_app/templates/guest_approve_thank_you.html',
+            tmp_context,
+        )
+
+        # value = {'guest': guest_attendance.contact.first_name,
+        #          'is_attending': data['attending'],
+        #          'num_of_guests': data['num_of_guests']}
+        # return Response({'status': message, 'message': value}, status=response_code)
 
 
 class ReadinessProbe(APIView):

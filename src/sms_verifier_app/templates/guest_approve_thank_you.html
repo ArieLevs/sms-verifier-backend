@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <div class="login">
+        <div class="form-group">
+            {% if error %}
+                <div style="margin:0 auto; color: ghostwhite; text-align: center ">
+                    <p>{{ error }}</p>
+                </div>
+            {% else %}
+                <h1>Thank You!</h1>
+
+                {% if guest_attendance.is_attending %}
+                    <p>We are waiting to see you</p>
+
+                    {% if guest_attendance.event.waze_link %}
+                        <p>Navigate to the event using this <a href="{{ guest_attendance.event.waze_link }}">Waze
+                            Link</a></p>
+                    {% endif %}
+
+                    {% if guest_attendance.event.event_image %}
+                        <br>
+                        <div class="row">
+                            <div class="col d-flex justify-content-center">
+                                <div class="item"><img
+                                        src="/media/event_{{ guest_attendance.event.id }}/event_image.jpeg"
+                                        class="img-fluid" alt="event image"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                    {% endif %}
+                {% else %}
+                    <p>Sorry you cannot make it</p>
+                {% endif %}
+
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

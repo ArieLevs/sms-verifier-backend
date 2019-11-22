@@ -274,6 +274,7 @@ def verify_guest_uuid(request, uuid):
         request,
         settings.BASE_DIR + '/sms_verifier_app/templates/guest_approve.html',
         tmp_context,
+        status=HttpResponse.status_code,
     )
 
 
