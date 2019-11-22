@@ -13,6 +13,10 @@ WORKDIR /sms-verifier-backend
 # Needed for mysqlclient requirement when using python alpine image
 RUN apk add --no-cache mariadb-dev build-base
 
+# Pillow dependencies https://pillow.readthedocs.io/en/latest/installation.html
+RUN apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev \
+                       tiff-dev tk-dev tcl-dev harfbuzz-dev fribidi-dev
+
 ADD src /sms-verifier-backend
 RUN pip install \
     --index-url $PYPI_REPO \
