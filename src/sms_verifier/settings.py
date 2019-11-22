@@ -32,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('django_secret_key', 'djangoSecretKey')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if 'dev' or 'ci' in ENVIRONMENT:
+if ENVIRONMENT == 'dev' or ENVIRONMENT == 'ci':
     DEBUG = True
     EXTRA_ALLOWED_HOSTS.append('*')
 else:
