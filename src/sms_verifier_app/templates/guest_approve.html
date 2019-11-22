@@ -11,6 +11,11 @@
                 </div>
             {% else %}
                 <p>Hi {{ guest_f_name }} {{ guest_l_name }},</p>
+                <p>You have been invited to {{ event_name }} on {{ event_date }} at {{ event_location_name }}</p>
+
+                {% if event_waze_link %}
+                <p>Navigate to the event using this <a href="{{ event_waze_link }}">Waze Link</a></p>
+                {% endif %}
 
                 <form method="POST" action="{% url 'sms_verifier_app:approve_guest' %}" id="guest_approve"
                       name="guest_approve" role="form">

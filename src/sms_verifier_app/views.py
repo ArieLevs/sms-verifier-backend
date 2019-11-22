@@ -246,6 +246,12 @@ def verify_guest_uuid(request, uuid):
         tmp_context['guest_f_name'] = event_attendance.contact.first_name
         tmp_context['guest_l_name'] = event_attendance.contact.last_name
         tmp_context['uuid'] = uuid
+        tmp_context['event_name'] = event_attendance.event.name
+        tmp_context['event_location_name'] = event_attendance.event.event_location_name
+        tmp_context['event_date'] = event_attendance.event.event_date
+        # If waze_link is not None
+        if event_attendance.event.waze_link:
+            tmp_context['event_waze_link'] = event_attendance.event.waze_link
         tmp_context['event_image_id'] = event_attendance.event.id
 
     except Contacts.DoesNotExist:

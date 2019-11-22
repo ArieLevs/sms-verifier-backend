@@ -34,10 +34,12 @@ class Event(models.Model):
     name = models.CharField(_('Event Name'), max_length=255, null=False)
     type = models.CharField(_('Event Type'), max_length=64, null=False)
     event_date = models.DateField(_('Events Date'), null=False)
+    event_location_name = models.CharField(_('Event Location Name'), max_length=255, null=False)
     event_image = models.ImageField(max_length=255,
                                     storage=OverwriteStorage(),
                                     upload_to=user_media_directory_path,
                                     default='general_documents')
+    waze_link = models.URLField(max_length=255, null=True, default=None)
 
     def __str__(self):
         return self.name
