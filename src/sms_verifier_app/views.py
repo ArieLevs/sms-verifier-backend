@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models import Sum
 
 from sms_verifier_app.forms import CSVImportForm
 from sms_verifier_app.models import Contacts, Event, BroadcastList, EventAttendances
@@ -188,12 +189,21 @@ def events_list_view(request):
     default_logger.info("events_list_view request at: " + str(datetime.datetime.now()))
     default_logger.info(request)
 
+    events_result_list = []
     # return all events from database
     events_list = Event.objects.all()
+    for event in events_list:  # for each event found
+        # filter all related attendances from the EventAttendances table,
+        # sum the result by num_of_guests and filter result again
+        event_attendances_sum = EventAttendances.objects.filter(
+            event=event
+        ).aggregate(Sum('num_of_guests')).get('num_of_guests__sum')
+        # append the event object, and the sum result, for usage in 'events_list' template
+        events_result_list.append({'event': event, 'event_attendances': event_attendances_sum})
     default_logger.info("returned events list: {}".format(events_list))
 
     temp_context = context.copy()
-    temp_context['events_list'] = events_list
+    temp_context['events_list'] = events_result_list
 
     return render(
         request,

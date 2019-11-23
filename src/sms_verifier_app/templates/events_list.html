@@ -15,6 +15,7 @@
                                 <th><span>Event Name</span></th>
                                 <th><span>Type</span></th>
                                 <th><span>Event Date</span></th>
+                                <th><span>Attendances Sum</span></th>
                                 <th>&nbsp;</th>
                             </tr>
                             </thead>
@@ -22,13 +23,16 @@
                             {% for event in events_list %}
                                 <tr>
                                     <td>
-                                        <span class="label label-default">{{ event.name }}</span>
+                                        <span class="label label-default">{{ event.event.name }}</span>
                                     </td>
                                     <td>
-                                        <span class="label label-default">{{ event.type }}</span>
+                                        <span class="label label-default">{{ event.event.type }}</span>
                                     </td>
                                     <td>
-                                        <span class="label label-default">{{ event.event_date }}</span>
+                                        <span class="label label-default">{{ event.event.event_date }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="label label-default">{{ event.event_attendances }}</span>
                                     </td>
                                 </tr>
                             {% endfor %}
