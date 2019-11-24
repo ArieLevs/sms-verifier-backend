@@ -27,6 +27,6 @@ class EventAdmin(admin.ModelAdmin):
 class EventAttendancesAdmin(admin.ModelAdmin):
     list_display = ('contact', 'event', 'is_responded', 'is_attending',)
     list_filter = ('is_responded', 'is_attending',)
-    search_fields = ('contact',)
+    search_fields = ('contact__first_name', 'contact__last_name',)
     ordering = ('contact',)
     pass
