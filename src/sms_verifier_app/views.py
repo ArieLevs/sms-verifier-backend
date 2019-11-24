@@ -193,13 +193,16 @@ def events_list_view(request):
     # return all events from database
     events_list = Event.objects.all()
     for event in events_list:  # for each event found
-        # filter all related attendances from the EventAttendances table,
-        # sum the result by num_of_guests and filter result again
-        event_attendances_sum = EventAttendances.objects.filter(
-            event=event
-        ).aggregate(Sum('num_of_guests')).get('num_of_guests__sum')
+        # get all attendances for current event, return a QuerySet with a list of EventAttendances
+        current_event_attendances = EventAttendances.objects.filter(event=event)
+        # sum the result for num of invited and num of attending
+        event_invited = current_event_attendances.aggregate(Sum('num_of_invited')).get('num_of_invited__sum')
+        # sum the result for num of attending
+        event_attendances = current_event_attendances.aggregate(Sum('num_of_attending')).get('num_of_attending__sum')
         # append the event object, and the sum result, for usage in 'events_list' template
-        events_result_list.append({'event': event, 'event_attendances': event_attendances_sum})
+        events_result_list.append({'event': event,
+                                   'event_invited': event_invited,
+                                   'event_attendances': event_attendances})
     default_logger.info("returned events list: {}".format(events_list))
 
     temp_context = context.copy()

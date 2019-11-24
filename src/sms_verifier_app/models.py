@@ -57,7 +57,12 @@ class EventAttendances(models.Model):
 
     is_responded = models.BooleanField(_('Is Responded'), default=False)
     is_attending = models.BooleanField(_('Is Attending'), default=False)
-    num_of_guests = models.IntegerField(_('Number of guests attending'), default=0)
+
+    # although this object has a single contacts foreign key,
+    # an attendance can be for example, 'Alice and Bob Smith', or 'Alice and her partner',
+    # this way the user will need to specify invited number
+    num_of_invited = models.IntegerField(_('Number of guests invited'), default=0)
+    num_of_attending = models.IntegerField(_('Number of guests attending'), default=0)
 
     def __str__(self):
         return self.contact.first_name + ' ' + self.contact.last_name + ' - ' + str(self.uuid)
