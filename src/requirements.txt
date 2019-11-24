@@ -5,6 +5,7 @@ gunicorn==20.0.0
 mysqlclient==1.4.5
 
 pillow==6.2.1 # ImageField
+pytz==2019.3
 
 django_user_email_extension
 djangorestframework

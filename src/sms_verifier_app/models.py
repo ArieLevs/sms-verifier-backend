@@ -1,6 +1,8 @@
 import os
 import uuid
 
+import datetime
+import pytz
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -56,6 +58,8 @@ class EventAttendances(models.Model):
     uuid = models.UUIDField(_('UUID'), default=uuid.uuid4)
 
     is_responded = models.BooleanField(_('Is Responded'), default=False)
+    date_responded = models.DateTimeField(_('Date Responded'), default=datetime.datetime(2019, 1, 1, 0, 0, 0),
+                                          blank=True)
     is_attending = models.BooleanField(_('Is Attending'), default=False)
 
     # although this object has a single contacts foreign key,
@@ -64,8 +68,20 @@ class EventAttendances(models.Model):
     num_of_invited = models.IntegerField(_('Number of guests invited'), default=0)
     num_of_attending = models.IntegerField(_('Number of guests attending'), default=0)
 
+    # update field each time this model is updated
+    updated = models.DateTimeField(_('Last Updated'), auto_now=True)
+
     def __str__(self):
         return self.contact.first_name + ' ' + self.contact.last_name + ' - ' + str(self.uuid)
+
+    def __init__(self, *args, **kwargs):
+        super(EventAttendances, self).__init__(*args, **kwargs)
+        self.__is_responded = self.is_responded
+
+    def save(self, *args, **kwargs):
+        if self.is_responded and not self.__is_responded:
+            self.date_responded = datetime.datetime.now(tz=pytz.utc)
+        super(EventAttendances, self).save(*args, **kwargs)
 
     class Meta:
         unique_together = (('event', 'contact'),)  # Set primary combined key
