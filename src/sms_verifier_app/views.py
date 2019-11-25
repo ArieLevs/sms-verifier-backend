@@ -127,20 +127,24 @@ def upload_contacts(request):
                     invalid_contacts_list.append(contact_dict)
                     continue
 
-                # try creating current contact
-                p, created = Contacts.objects.get_or_create(
-                    first_name=contact_dict['first_name'],
-                    last_name=contact_dict['last_name'],
-                    phone_number=contact_dict['phone_number'],
-                )
-
-                # if created update valid_contacts_list else update duplicate_contacts_list
-                if created:
+                # If contact already exists, just update first and last name
+                if Contacts.objects.filter(phone_number=contact_dict['phone_number']).exists():
+                    default_logger.error(
+                        'phone {} already exists in the db, updating names'.format(contact_dict['phone_number'])
+                    )
+                    Contacts.objects.filter(phone_number=contact_dict['phone_number']).update(
+                        first_name=contact_dict['first_name'],
+                        last_name=contact_dict['last_name'],
+                    )
+                    duplicate_contacts_list.append(contact_dict)
+                else:
+                    Contacts.objects.create(
+                        first_name=contact_dict['first_name'],
+                        last_name=contact_dict['last_name'],
+                        phone_number=contact_dict['phone_number'],
+                    )
                     default_logger.info('new contact created: {}'.format(contact_dict))
                     valid_contacts_list.append(contact_dict)
-                else:
-                    default_logger.error('contact {} already exists in the db'.format(contact_dict))
-                    duplicate_contacts_list.append(contact_dict)
 
             default_logger.info('failed contacts are: {}'.format(invalid_contacts_list))
             default_logger.info('duplicate contacts are: {}'.format(duplicate_contacts_list))
