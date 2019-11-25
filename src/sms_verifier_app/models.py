@@ -14,6 +14,10 @@ class Contacts(models.Model):
     last_name = models.CharField(_('Last Name'), max_length=255, null=True, default='')
     phone_number = models.CharField(_('Phone Number'), primary_key=True, max_length=32, null=False)
 
+    # set created date, and update field each time this model is updated
+    created = models.DateTimeField(_('Date Created'), auto_now_add=True)
+    updated = models.DateTimeField(_('Last Updated'), auto_now=True)
+
     def __str__(self):
         return self.first_name + ' ' + self.last_name
 
@@ -43,6 +47,10 @@ class Event(models.Model):
                                     default='general_documents')
     waze_link = models.URLField(max_length=255, null=True, default=None)
 
+    # set created date, and update field each time this model is updated
+    created = models.DateTimeField(_('Date Created'), auto_now_add=True)
+    updated = models.DateTimeField(_('Last Updated'), auto_now=True)
+
     def __str__(self):
         return self.name
 
@@ -68,7 +76,8 @@ class EventAttendances(models.Model):
     num_of_invited = models.IntegerField(_('Number of guests invited'), default=0)
     num_of_attending = models.IntegerField(_('Number of guests attending'), default=0)
 
-    # update field each time this model is updated
+    # set created date, and update field each time this model is updated
+    created = models.DateTimeField(_('Date Created'), auto_now_add=True)
     updated = models.DateTimeField(_('Last Updated'), auto_now=True)
 
     def __str__(self):
@@ -79,6 +88,7 @@ class EventAttendances(models.Model):
         self.__is_responded = self.is_responded
 
     def save(self, *args, **kwargs):
+        # update the date_responded datetime field only when the is_responded field is set to True
         if self.is_responded and not self.__is_responded:
             self.date_responded = datetime.datetime.now(tz=pytz.utc)
         super(EventAttendances, self).save(*args, **kwargs)
@@ -96,8 +106,13 @@ class BroadcastList(models.Model):
     event_message_content = models.TextField(_('Message of Event'), null=False, blank=False)
     attendances = models.ManyToManyField(EventAttendances)
 
+    # set created date, and update field each time this model is updated
+    created = models.DateTimeField(_('Date Created'), auto_now_add=True)
+    updated = models.DateTimeField(_('Last Updated'), auto_now=True)
+
     class Meta:
         unique_together = (('name', 'for_event'),)  # Set primary combined key
         verbose_name = _('broadcast_list')
         verbose_name_plural = _('broadcast_list')
         db_table = 'broadcast_list'
+'2019-01-01 00:00:00'
