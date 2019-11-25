@@ -115,4 +115,3 @@ class BroadcastList(models.Model):
         verbose_name = _('broadcast_list')
         verbose_name_plural = _('broadcast_list')
         db_table = 'broadcast_list'
-'2019-01-01 00:00:00'
