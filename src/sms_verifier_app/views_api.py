@@ -140,7 +140,7 @@ class BroadcastListView(APIView):
                     {
                         'first_name': attendance.contact.first_name,
                         'phone_number': attendance.contact.phone_number,
-                        'uuid': attendance.uuid,
+                        'uuid': attendance.uuid.hex,
                     } for attendance in broadcast_list.attendances.all()
                 ]
 
