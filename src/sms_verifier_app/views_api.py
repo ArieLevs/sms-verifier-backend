@@ -220,10 +220,11 @@ class ApproveGuestView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Save current attendance values
-        guest_attendance.is_responded = True
-        guest_attendance.is_attending = data['attending']
-        guest_attendance.num_of_guests = data['num_of_guests']
-        guest_attendance.save()
+        guest_attendance.update_attending(
+            responded=True,
+            attending=data['attending'],
+            num_attending=data['num_of_guests']
+        )
 
         tmp_context = context.copy()
         tmp_context['guest_attendance'] = guest_attendance

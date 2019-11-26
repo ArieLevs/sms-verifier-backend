@@ -93,6 +93,19 @@ class EventAttendances(models.Model):
             self.date_responded = datetime.datetime.now(tz=pytz.utc)
         super(EventAttendances, self).save(*args, **kwargs)
 
+    def update_attending(self, responded, attending, num_attending):
+        """
+        update attending status
+        :param responded: Boolean
+        :param attending: Boolean
+        :param num_attending: Integer
+        :return:
+        """
+        self.is_responded = responded
+        self.is_attending = attending
+        self.num_of_attending = num_attending
+        self.save()
+
     class Meta:
         unique_together = (('event', 'contact'),)  # Set primary combined key
         verbose_name = _('event_attendances')
