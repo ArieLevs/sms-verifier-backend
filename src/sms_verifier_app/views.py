@@ -240,6 +240,26 @@ def broadcasts_list_view(request):
     )
 
 
+@login_required()
+def attendance_list_update_view(request, event_id):
+    default_logger.info("attendance_list_update_view request at: " + str(datetime.datetime.now()))
+    default_logger.info(request)
+
+    # return all attendances for current event from database
+    attendances = EventAttendances.objects.filter(event=event_id)
+    default_logger.info("returned attendances list: {}".format(attendances))
+
+    temp_context = context.copy()
+    temp_context['attendances'] = attendances
+
+    return render(
+        request,
+        settings.BASE_DIR + '/sms_verifier_app/templates/update_attendances.html',
+        temp_context,
+        status=HttpResponse.status_code,
+    )
+
+
 def verify_guest_uuid(request, uuid):
     default_logger.info("New verify_guest_uuid request at: " + str(datetime.datetime.now()))
     default_logger.info(str(request))

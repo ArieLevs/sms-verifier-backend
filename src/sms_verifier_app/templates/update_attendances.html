@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <h1 class="page-header">SMS Verifier</h1>
+    {% if user.is_authenticated %}
+        <p>Event name: </p>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main-box clearfix">
+
+
+                    <table class="table user-list">
+                        <thead>
+                        <tr>
+                            <th><span>Select</span></th>
+                            <th><span>Type</span></th>
+                            <th><span>Event Date</span></th>
+                            <th><span>Invited Sum</span></th>
+                            <th><span>Attendances Sum</span></th>
+                            <th><span>Attendances</span></th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for event in attendances %}
+                            <tr>
+                                <td>
+                                    <span class="label label-default">
+                                        <label class="checkbox-inline">
+                                        <input type="checkbox" value="">C++
+                                        </label>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="label label-default">{{ event.event.type }}</span>
+                                </td>
+                                <td>
+                                    <span class="label label-default">{{ event.event.event_date }}</span>
+                                </td>
+                                <td>
+                                    <span class="label label-default">{{ event.event_invited }}</span>
+                                </td>
+                                <td>
+                                    <span class="label label-default">{{ event.event_attendances }}</span>
+                                </td>
+                                <td>
+                                    <span class="label label-default"><a
+                                            href="{% url 'sms_verifier_app:attendance_list_update_view' event_id=event.event.id %}"
+                                            class="btn btn-info" role="button">Update</a></span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Email</label>
+                                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Password</label>
+                                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress">Address</label>
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress2">Address 2</label>
+                            <input type="text" class="form-control" id="inputAddress2"
+                                   placeholder="Apartment, studio, or floor">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputCity">City</label>
+                                <input type="text" class="form-control" id="inputCity">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputState">State</label>
+                                <select id="inputState" class="form-control">
+                                    <option selected>Choose...</option>
+                                    <option>...</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="inputZip">Zip</label>
+                                <input type="text" class="form-control" id="inputZip">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="gridCheck">
+                                <label class="form-check-label" for="gridCheck">
+                                    Check me out
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br>
+
+    {% else %}
+        <p>You are not logged in, <a href="{% url 'sms_verifier_app:login_page' %}">login now</a></p>
+    {% endif %}
+
+{% endblock %}

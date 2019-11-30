@@ -17,6 +17,7 @@
                                 <th><span>Event Date</span></th>
                                 <th><span>Invited Sum</span></th>
                                 <th><span>Attendances Sum</span></th>
+                                <th><span>Attendances</span></th>
                                 <th>&nbsp;</th>
                             </tr>
                             </thead>
@@ -37,6 +38,9 @@
                                     </td>
                                     <td>
                                         <span class="label label-default">{{ event.event_attendances }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="label label-default"><a href="{% url 'sms_verifier_app:attendance_list_update_view' event_id=event.event.id %}" class="btn btn-info" role="button">Update</a></span>
                                     </td>
                                 </tr>
                             {% endfor %}
