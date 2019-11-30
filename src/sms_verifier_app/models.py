@@ -63,7 +63,7 @@ class Event(models.Model):
 class EventAttendances(models.Model):
     event = models.ForeignKey(to=Event, on_delete=models.CASCADE)
     contact = models.ForeignKey(Contacts, on_delete=models.CASCADE)
-    uuid = models.UUIDField(_('UUID'), default=uuid.uuid4)
+    uuid = models.UUIDField(_('UUID'), default=uuid.uuid4, editable=False)
 
     is_responded = models.BooleanField(_('Is Responded'), default=False)
     date_responded = models.DateTimeField(_('Date Responded'), default=datetime.datetime(2019, 1, 1, 0, 0, 0),
